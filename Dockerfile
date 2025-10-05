@@ -1,38 +1,44 @@
-# ---- Stage 1: Build với Ant ----
+# ---------------- Stage 1: Build all projects with Ant ----------------
 FROM openjdk:8-jdk AS build
 
 WORKDIR /app
 
-# Cài Ant
-RUN apt-get update && apt-get install -y ant && rm -rf /var/lib/apt/lists/*
+# Cài Ant + wget
+RUN apt-get update && apt-get install -y ant wget && rm -rf /var/lib/apt/lists/*
 
-# Copy toàn bộ source code (bao gồm cả libs/)
+# Copy toàn bộ project và thư viện
 COPY . /app
 
-# Copy CopyLibs.jar vào ant/lib (lấy từ thư mục libs trong project)
-COPY libs/org-netbeans-modules-java-j2seproject-copylibstask.jar /usr/share/ant/lib/
+# Tạo thư mục lib cho Ant build, copy các jar cần thiết
+RUN mkdir -p /app/lib
+COPY libs/*.jar /app/lib/
 
-# Build từng project
+# Set CLASSPATH để Ant compile không bị lỗi
+ENV CLASSPATH=/app/lib/*
+
+# Build từng project bằng Ant (tạo WAR trong dist/)
 WORKDIR /app/ch08_ex1_email
-RUN ant clean dist
+RUN ant clean && ant dist
 
 WORKDIR /app/ch09_ex1_download
-RUN ant clean dist
+RUN ant clean && ant dist
 
 WORKDIR /app/ch09_ex2_cart
-RUN ant clean dist
+RUN ant clean && ant dist
 
-
-# ---- Stage 2: Run với Tomcat 9 ----
+# ---------------- Stage 2: Run với Tomcat ----------------
 FROM tomcat:9-jdk11-openjdk
 
-# Copy WAR sang Tomcat webapps
-COPY --from=build /app/ch08_ex1_email/dist/*.war /usr/local/tomcat/webapps/ch08_email.war
-COPY --from=build /app/ch09_ex1_download/dist/*.war /usr/local/tomcat/webapps/ch09_download.war
-COPY --from=build /app/ch09_ex2_cart/dist/*.war /usr/local/tomcat/webapps/ch09_cart.war
+# Copy WAR đã build sang Tomcat
+COPY --from=build /app/ch08_ex1_email/dist/*.war /usr/local/tomcat/webapps/c8_email.war
+COPY --from=build /app/ch09_ex1_download/dist/*.war /usr/local/tomcat/webapps/c9_download.war
+COPY --from=build /app/ch09_ex2_cart/dist/*.war /usr/local/tomcat/webapps/c9_cart.war
 
-# Copy các jar cần thiết vào Tomcat lib (JSTL + servlet-api)
-COPY --from=build /app/libs/*.jar /usr/local/tomcat/lib/
+# Copy thư viện cần thiết vào Tomcat lib
+COPY --from=build /app/lib/*.jar /usr/local/tomcat/lib/
 
+# Expose port
 EXPOSE 8080
+
+# Run Tomcat
 CMD ["catalina.sh", "run"]
