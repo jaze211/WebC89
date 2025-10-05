@@ -6,6 +6,10 @@ WORKDIR /app
 # Cài Ant + wget
 RUN apt-get update && apt-get install -y ant wget && rm -rf /var/lib/apt/lists/*
 
+# Thêm CopyLibs task của NetBeans để Ant build không lỗi
+RUN wget -O /usr/share/ant/lib/org-netbeans-modules-java-j2seproject-copylibstask.jar \
+    https://repo1.maven.org/maven2/org/netbeans/modules/org-netbeans-modules-java-j2seproject-copylibstask/1.0/org-netbeans-modules-java-j2seproject-copylibstask-1.0.jar
+
 # Copy toàn bộ source code
 COPY . /app
 
