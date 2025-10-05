@@ -1,0 +1,659 @@
+ok tôi cần bạn đọc bản doc của bài tiếp theo là bìa 8 và 9 gộp lại với nhau
+chương 8
+The goal of this chapter has been to show you how to use EL to get data
+from JavaBeans, maps, arrays, and lists that have been stored as an attribute in
+one of the four scopes of a web application. Along the way, you learned how to
+use some of the implicit EL objects and operators to perform some other useful
+tasks. Although there’s more to learn about EL, this is probably all you need to
+know if you use the MVC pattern in your web applications.
+When you use EL, you can remove much of the Java scripting and expres￾sions from your JSPs, and that makes your code easier to read and maintain.
+That also makes it easier for web designers to work with these pages. To take
+this a step further, though, the next chapter shows you how to use the JSP
+Standard Tag Library (JSTL) to remove the rest of the scripting from your
+JSPs. As you’ll see, JSTL tags work well with EL, and the two are often mixed
+in a JSP.
+Summary
+The JSP Expression Language ( EL) provides a compact syntax that lets you
+get data from JavaBeans, maps, arrays, and lists that have been stored as an
+attribute of a web application.
+A JavaBean is a special type of object that provides a standard way to access
+its properties.
+A map is a special type of collection that’s used to store key/value pairs.
+A list is a type of collection that uses an index to retrieve an object that’s
+stored in the collection.
+You can use the dot operator to work with JavaBeans and maps.
+You can use the L ] operator to work with arrays and lists.
+If the expression within an [ ] operator isn’t enclosed within quotes, EL
+evaluates the expression.
+If necessary, you can use the implicit EL objects to explicitly specify scope.
+You can use EL to get nested properties.
+You can use the implicit EL objects to work with request parameters, HTTP
+headers, cookies, context initialization parameters, and the implicit
+pageContext object that’s available to all JSPs.
+You can use other EL operators to perform calculations and make
+comparisons.
+If necessary, you can disable EL or scripting for one or more pages in a web
+application.
+267 Chapter 8 How to use EL
+Exercise 8-1 Modify the Email List application
+In this exercise, you’ll enhance the Email List application so it uses EL to
+display attributes.
+Convert standard JSP bean tags to EL
+1. Open the ch08_exl_email project in the ex_starts directory.
+2. Run the application. Then, enter data for a user, click the Join button, and click
+the Return button. Note how the user’s data is displayed on both pages.
+3. Open the index.jsp and thanks.jsp files. Then, convert the standard JSP tags to
+EL. Note how the EL is shorter and easier to read than the standard JSP tags.
+4. Run the application. It should work the same as it did before.
+Use EL to work with a collection and an initialization parameter
+5. Open the EmailListServlet class. Note that it stores the current date as a
+request attribute. Note also that it stores an ArrayList of User objects as a
+session attribute.
+6. Open the web.xml file. Note that it doesn’t allow scripting for the current
+application. Note also that the custserv@murach.com email address is stored
+as a context initialization parameter named custServEmail.
+7. Open the thanks.jsp file. Then, complete the code at the end of the page so it
+displays the current date, the first two users in the ArrayList of User objects,
+and the customer service email.
+8. Run the application. Then, enter data for a user, click on the Return button,
+and note how the user’s data is displayed on the first page.
+Use EL to specify scope
+9. Open the thanks.jsp file and explicitly specify the scope for the user attribute
+and the currentDate attribute.
+10. Test the application to make sure that it still works correctly
+
+chương 9
+Perspective
+The goal of this chapter has been to show you how to use JSTL with EL to
+eliminate or reduce scripting from your JSPs. However, it isn’t always possible
+to remove all scripting from your applications by using JSTL. In that case, you
+may occasionally want to use scripting. Another option, though, is to create and
+use custom tags that are stored in a custom tag library as described in the next
+chapter.
+Summary
+• The JSP Standard Tag Library ( JSTL) provides tags lor common tasks that
+need to be performed in JSPs.
+• Before you can use JSTL tags, you must make the jstl-impl.jar and
+jstl-api.jar files available to the application.
+• Before you can use JSTL tags in a JSP, you must code a taglib directive for
+the library that you want to use.
+• You can use a web browser to view the documentation for JSTL.
+• It’s generally considered a good practice to use the out tag to escape values
+that are output to a browser. This prevents most types of cross-site scripting
+( X S S ) attacks, in which an attacker attempts to insert JavaScript into your
+HTML pages.
+• You can use the forEach tag to loop through most types of collections,
+including regular arrays,
+• You can use the forTokens tag to loop through items in a delimited string.
+• You can use the if tag to code the equivalent of a Java if statement.
+• You can use the choose tag to code the equivalent of a Java if/else statement.
+305 Chapter 9 How to use JSTL
+Exercise 9-1 Use JSTL in the Download
+application
+In this exercise, you’ll use JSTL in the Download application that you were
+introduced to in the last chapter.
+1. Open the ch09_exl_download project in the ex_starts directory.
+2. Make sure the JSTL library is available to this application.
+3. Run the application to refresh your memory about how it works. Note that the
+first page displays a welcome message.
+4. Open the register.jsp and view_cookies.jsp files. Then, add the taglib directive
+for the core JSTL library to the beginning of these files. Finally, use the out
+tag to escape all the values in this application that are output to the browser.
+5. Test the application to make sure it works like it did before.
+6. Open the index.jsp file. Then, modify it so it uses the if tag to only display the
+welcome message if the cookie for the first name doesn’t contain a null value.
+7. Test the application to make sure it works correctly.
+Exercise 9-2 Use JSTL in the Cart application
+In this exercise, you’ll use JSTL to loop through an array list of Product objects.
+1. Open the ch09_ex2_cart project in the ex_starts directory.
+2. Open the web.xml file. Note that the ProductsServlet class is mapped to the
+/loadProducts URL and that this URL is set as the only welcome page. As a
+result, when this app starts, the browser issues an HTTP GET request for the
+ProductsServlet class.
+3. Open the ProductsServlet.java file. Note how this servlet uses the doGet
+method to read an ArrayList of Product objects from the projects.txt file and
+store them as an attribute of the session object.
+4. Make sure the JSTL library is available to this application.
+5. Test the application to make sure it works correctly.
+6. Open the index.jsp file and add the taglib directive that imports the core JSTL
+library. Then, add a forEach tag that loops through the ArrayList of Product
+objects and displays one row for each product. To do that, you can use EL to
+display the properties of each Product object. (Be sure to delete any old code
+that you no longer need.)
+7. Test the application to make sure that it works correctly.
+8. To prevent against XSS attacks, add the out tag to any EL values that should
+be escaped before they are returned to the browser.
+9. Test the application to make sure that it still works correctly
+
+
+
+PS D:\Self-Project\BaoBao_Web> .\tree.ps1
+|-- ch08email
+|   |-- nbproject
+|   |   |-- private
+|   |   |   |-- private.properties
+|   |   |   +-- private.xml
+|   |   |-- ant-deploy.xml
+|   |   |-- build-impl.xml
+|   |   |-- genfiles.properties
+|   |   |-- project.properties
+|   |   +-- project.xml
+|   |-- src
+|   |   |-- conf
+|   |   |   +-- MANIFEST.MF
+|   |   +-- java
+|   |       +-- murach
+|   |           |-- business
+|   |           |   +-- User.java
+|   |           |-- data
+|   |           |   +-- UserDB.java
+|   |           +-- email
+|   |               +-- EmailListServlet.java
+|   |-- web
+|   |   |-- META-INF
+|   |   |   +-- context.xml
+|   |   |-- styles
+|   |   |   +-- main.css
+|   |   |-- WEB-INF
+|   |   |   +-- web.xml
+|   |   |-- index.html
+|   |   +-- thanks.jsp
+|   +-- build.xml
+|-- ch08_ex1_email
+|   |-- nbproject
+|   |   |-- private
+|   |   |   |-- private.properties
+|   |   |   +-- private.xml
+|   |   |-- ant-deploy.xml
+|   |   |-- build-impl.xml
+|   |   |-- genfiles.properties
+|   |   |-- project.properties
+|   |   +-- project.xml
+|   |-- src
+|   |   |-- conf
+|   |   |   +-- MANIFEST.MF
+|   |   +-- java
+|   |       +-- murach
+|   |           |-- business
+|   |           |   +-- User.java
+|   |           |-- data
+|   |           |   |-- UserDB.java
+|   |           |   +-- UserIO.java
+|   |           +-- email
+|   |               +-- EmailListServlet.java
+|   |-- web
+|   |   |-- META-INF
+|   |   |   +-- context.xml
+|   |   |-- styles
+|   |   |   +-- main.css
+|   |   |-- WEB-INF
+|   |   |   |-- EmailList.txt
+|   |   |   +-- web.xml
+|   |   |-- index.jsp
+|   |   +-- thanks.jsp
+|   +-- build.xml
+|-- ch08_ex1_email_sol
+|   |-- nbproject
+|   |   |-- private
+|   |   |   |-- private.properties
+|   |   |   +-- private.xml
+|   |   |-- ant-deploy.xml
+|   |   |-- build-impl.xml
+|   |   |-- genfiles.properties
+|   |   |-- project.properties
+|   |   +-- project.xml
+|   |-- src
+|   |   |-- conf
+|   |   |   +-- MANIFEST.MF
+|   |   +-- java
+|   |       +-- murach
+|   |           |-- business
+|   |           |   +-- User.java
+|   |           |-- data
+|   |           |   |-- UserDB.java
+|   |           |   +-- UserIO.java
+|   |           +-- email
+|   |               +-- EmailListServlet.java
+|   |-- web
+|   |   |-- META-INF
+|   |   |   +-- context.xml
+|   |   |-- styles
+|   |   |   +-- main.css
+|   |   |-- WEB-INF
+|   |   |   |-- EmailList.txt
+|   |   |   +-- web.xml
+|   |   |-- index.jsp
+|   |   +-- thanks.jsp
+|   +-- build.xml
+|-- ch09cart
+|   |-- nbproject
+|   |   |-- private
+|   |   |   |-- private.properties
+|   |   |   +-- private.xml
+|   |   |-- ant-deploy.xml
+|   |   |-- build-impl.xml
+|   |   |-- genfiles.properties
+|   |   |-- project.properties
+|   |   +-- project.xml
+|   |-- src
+|   |   |-- conf
+|   |   |   +-- MANIFEST.MF
+|   |   +-- java
+|   |       +-- murach
+|   |           |-- business
+|   |           |   |-- Cart.java
+|   |           |   |-- LineItem.java
+|   |           |   +-- Product.java
+|   |           |-- cart
+|   |           |   +-- CartServlet.java
+|   |           +-- data
+|   |               +-- ProductIO.java
+|   |-- web
+|   |   |-- META-INF
+|   |   |   +-- context.xml
+|   |   |-- styles
+|   |   |   +-- main.css
+|   |   |-- WEB-INF
+|   |   |   |-- products.txt
+|   |   |   +-- web.xml
+|   |   |-- cart.jsp
+|   |   |-- checkout.jsp
+|   |   +-- index.jsp
+|   +-- build.xml
+|-- ch09email
+|   |-- nbproject
+|   |   |-- private
+|   |   |   |-- private.properties
+|   |   |   +-- private.xml
+|   |   |-- ant-deploy.xml
+|   |   |-- build-impl.xml
+|   |   |-- genfiles.properties
+|   |   |-- project.properties
+|   |   +-- project.xml
+|   |-- src
+|   |   |-- conf
+|   |   |   +-- MANIFEST.MF
+|   |   +-- java
+|   |       +-- murach
+|   |           |-- business
+|   |           |   +-- User.java
+|   |           |-- data
+|   |           |   +-- UserDB.java
+|   |           +-- email
+|   |               +-- EmailListServlet.java
+|   |-- web
+|   |   |-- META-INF
+|   |   |   +-- context.xml
+|   |   |-- styles
+|   |   |   +-- main.css
+|   |   |-- WEB-INF
+|   |   |   +-- web.xml
+|   |   |-- index.html
+|   |   +-- thanks.jsp
+|   +-- build.xml
+|-- ch09_ex1_download
+|   |-- nbproject
+|   |   |-- private
+|   |   |   |-- private.properties
+|   |   |   +-- private.xml
+|   |   |-- ant-deploy.xml
+|   |   |-- build-impl.xml
+|   |   |-- genfiles.properties
+|   |   |-- project.properties
+|   |   +-- project.xml
+|   |-- src
+|   |   |-- conf
+|   |   |   +-- MANIFEST.MF
+|   |   +-- java
+|   |       +-- murach
+|   |           |-- business
+|   |           |   +-- User.java
+|   |           |-- data
+|   |           |   +-- UserIO.java
+|   |           |-- download
+|   |           |   +-- DownloadServlet.java
+|   |           +-- util
+|   |               +-- CookieUtil.java
+|   |-- web
+|   |   |-- META-INF
+|   |   |   +-- context.xml
+|   |   |-- styles
+|   |   |   +-- main.css
+|   |   |-- WEB-INF
+|   |   |   +-- web.xml
+|   |   |-- 8601_download.jsp
+|   |   |-- delete_cookies.jsp
+|   |   |-- index.jsp
+|   |   |-- jr01_download.jsp
+|   |   |-- pf01_download.jsp
+|   |   |-- pf02_download.jsp
+|   |   |-- register.jsp
+|   |   +-- view_cookies.jsp
+|   +-- build.xml
+|-- ch09_ex1_download_sol
+|   |-- nbproject
+|   |   |-- private
+|   |   |   |-- private.properties
+|   |   |   +-- private.xml
+|   |   |-- ant-deploy.xml
+|   |   |-- build-impl.xml
+|   |   |-- genfiles.properties
+|   |   |-- project.properties
+|   |   +-- project.xml
+|   |-- src
+|   |   |-- conf
+|   |   |   +-- MANIFEST.MF
+|   |   +-- java
+|   |       +-- murach
+|   |           |-- business
+|   |           |   +-- User.java
+|   |           |-- data
+|   |           |   +-- UserIO.java
+|   |           |-- download
+|   |           |   +-- DownloadServlet.java
+|   |           +-- util
+|   |               +-- CookieUtil.java
+|   |-- web
+|   |   |-- META-INF
+|   |   |   +-- context.xml
+|   |   |-- styles
+|   |   |   +-- main.css
+|   |   |-- WEB-INF
+|   |   |   +-- web.xml
+|   |   |-- 8601_download.jsp
+|   |   |-- delete_cookies.jsp
+|   |   |-- index.jsp
+|   |   |-- jr01_download.jsp
+|   |   |-- pf01_download.jsp
+|   |   |-- pf02_download.jsp
+|   |   |-- register.jsp
+|   |   +-- view_cookies.jsp
+|   +-- build.xml
+|-- ch09_ex2_cart
+|   |-- nbproject
+|   |   |-- private
+|   |   |   |-- private.properties
+|   |   |   +-- private.xml
+|   |   |-- ant-deploy.xml
+|   |   |-- build-impl.xml
+|   |   |-- genfiles.properties
+|   |   |-- project.properties
+|   |   +-- project.xml
+|   |-- src
+|   |   |-- conf
+|   |   |   +-- MANIFEST.MF
+|   |   +-- java
+|   |       +-- murach
+|   |           |-- business
+|   |           |   |-- Cart.java
+|   |           |   |-- LineItem.java
+|   |           |   +-- Product.java
+|   |           |-- cart
+|   |           |   |-- CartServlet.java
+|   |           |   +-- ProductsServlet.java
+|   |           +-- data
+|   |               +-- ProductIO.java
+|   |-- web
+|   |   |-- META-INF
+|   |   |   +-- context.xml
+|   |   |-- styles
+|   |   |   +-- main.css
+|   |   |-- WEB-INF
+|   |   |   |-- products.txt
+|   |   |   +-- web.xml
+|   |   |-- cart.jsp
+|   |   |-- checkout.jsp
+|   |   +-- index.jsp
+|   +-- build.xml
+|-- ch09_ex2_cart_sol
+|   |-- nbproject
+|   |   |-- private
+|   |   |   |-- private.properties
+|   |   |   +-- private.xml
+|   |   |-- ant-deploy.xml
+|   |   |-- build-impl.xml
+|   |   |-- genfiles.properties
+|   |   |-- project.properties
+|   |   +-- project.xml
+|   |-- src
+|   |   |-- conf
+|   |   |   +-- MANIFEST.MF
+|   |   +-- java
+|   |       +-- murach
+|   |           |-- business
+|   |           |   |-- Cart.java
+|   |           |   |-- LineItem.java
+|   |           |   +-- Product.java
+|   |           |-- cart
+|   |           |   |-- CartServlet.java
+|   |           |   +-- ProductsServlet.java
+|   |           +-- data
+|   |               +-- ProductIO.java
+|   |-- web
+|   |   |-- META-INF
+|   |   |   +-- context.xml
+|   |   |-- styles
+|   |   |   +-- main.css
+|   |   |-- WEB-INF
+|   |   |   |-- products.txt
+|   |   |   +-- web.xml
+|   |   |-- cart.jsp
+|   |   |-- checkout.jsp
+|   |   +-- index.jsp
+|   +-- build.xml
++-- doc.txt
+
+
+
+
+|-- ch08_ex1_email
+|   |-- src
+|   |   +-- java
+|   |-- web
+|   |   |-- styles
+|   |   |-- WEB-INF
+|   |   |   +-- web.xml
+|   |   |-- index.jsp
+|   |   +-- thanks.jsp
+|   +-- build.xml
+|-- ch08_ex1_email_sol
+|   |-- src
+|   |   +-- java
+|   |-- web
+|   |   |-- styles
+|   |   |-- WEB-INF
+|   |   |   +-- web.xml
+|   |   |-- index.jsp
+|   |   +-- thanks.jsp
+|   +-- build.xml
+|-- ch09cart
+|   |-- src
+|   |   +-- java
+|   |-- web
+|   |   |-- styles
+|   |   |-- WEB-INF
+|   |   |   +-- web.xml
+|   |   |-- cart.jsp
+|   |   |-- checkout.jsp
+|   |   +-- index.jsp
+|   +-- build.xml
+|-- ch09email
+|   |-- src
+|   |   +-- java
+|   |-- web
+|   |   |-- styles
+|   |   |-- WEB-INF
+|   |   |-- index.html
+|   |   +-- thanks.jsp
+|   +-- build.xml
+|-- ch09_ex1_download
+|   |-- src
+|   |   +-- java
+|   |-- web
+|   |   |-- styles
+|   |   |-- WEB-INF
+|   |   |-- 8601_download.jsp
+|   |   |-- delete_cookies.jsp
+|   |   |-- index.jsp
+|   |   |-- jr01_download.jsp
+|   |   |-- pf01_download.jsp
+|   |   |-- pf02_download.jsp
+|   |   |-- register.jsp
+|   |   +-- view_cookies.jsp
+|   +-- build.xml
+|-- ch09_ex1_download_sol
+|   |-- src
+|   |   +-- java
+|   |-- web
+|   |   |-- styles
+|   |   |-- WEB-INF
+|   |   |-- 8601_download.jsp
+|   |   |-- delete_cookies.jsp
+|   |   |-- index.jsp
+|   |   |-- jr01_download.jsp
+|   |   |-- pf01_download.jsp
+|   |   |-- pf02_download.jsp
+|   |   |-- register.jsp
+|   |   +-- view_cookies.jsp
+|   +-- build.xml
+|-- ch09_ex2_cart
+|   |-- src
+|   |   +-- java
+|   |-- web
+|   |   |-- styles
+|   |   |-- WEB-INF
+|   |   |   +-- web.xml
+|   |   |-- cart.jsp
+|   |   |-- checkout.jsp
+|   |   +-- index.jsp
+|   +-- build.xml
+|-- ch09_ex2_cart_sol
+|   |-- src
+|   |   +-- java
+|   |-- web
+|   |   |-- styles
+|   |   |-- WEB-INF
+|   |   |   +-- web.xml
+|   |   |-- cart.jsp
+|   |   |-- checkout.jsp
+|   |   +-- index.jsp
+|   +-- build.xml
++-- doc.txt
+
+
+
+|-- ch08_ex1_email
+|   |-- nbproject
+|   |   |-- private
+|   |   |   |-- private.properties
+|   |   |   +-- private.xml
+|   |   |-- ant-deploy.xml
+|   |   |-- build-impl.xml
+|   |   |-- genfiles.properties
+|   |   |-- project.properties
+|   |   +-- project.xml
+|   |-- src
+|   |   |-- conf
+|   |   |   +-- MANIFEST.MF
+|   |   +-- java
+|   |       +-- murach
+|   |           |-- business
+|   |           |   +-- User.java
+|   |           |-- data
+|   |           |   |-- UserDB.java
+|   |           |   +-- UserIO.java
+|   |           +-- email
+|   |               +-- EmailListServlet.java
+|   |-- web
+|   |   |-- META-INF
+|   |   |   +-- context.xml
+|   |   |-- styles
+|   |   |   +-- main.css
+|   |   |-- WEB-INF
+|   |   |   |-- EmailList.txt
+|   |   |   +-- web.xml
+|   |   |-- index.jsp
+|   |   +-- thanks.jsp
+|   +-- build.xml
+|-- ch09_ex1_download
+|   |-- nbproject
+|   |   |-- private
+|   |   |   |-- private.properties
+|   |   |   +-- private.xml
+|   |   |-- ant-deploy.xml
+|   |   |-- build-impl.xml
+|   |   |-- genfiles.properties
+|   |   |-- project.properties
+|   |   +-- project.xml
+|   |-- src
+|   |   |-- conf
+|   |   |   +-- MANIFEST.MF
+|   |   +-- java
+|   |       +-- murach
+|   |           |-- business
+|   |           |   +-- User.java
+|   |           |-- data
+|   |           |   +-- UserIO.java
+|   |           |-- download
+|   |           |   +-- DownloadServlet.java
+|   |           +-- util
+|   |               +-- CookieUtil.java
+|   |-- web
+|   |   |-- META-INF
+|   |   |   +-- context.xml
+|   |   |-- styles
+|   |   |   +-- main.css
+|   |   |-- WEB-INF
+|   |   |   +-- web.xml
+|   |   |-- 8601_download.jsp
+|   |   |-- delete_cookies.jsp
+|   |   |-- index.jsp
+|   |   |-- jr01_download.jsp
+|   |   |-- pf01_download.jsp
+|   |   |-- pf02_download.jsp
+|   |   |-- register.jsp
+|   |   +-- view_cookies.jsp
+|   +-- build.xml
+|-- ch09_ex2_cart
+|   |-- nbproject
+|   |   |-- private
+|   |   |   |-- private.properties
+|   |   |   +-- private.xml
+|   |   |-- ant-deploy.xml
+|   |   |-- build-impl.xml
+|   |   |-- genfiles.properties
+|   |   |-- project.properties
+|   |   +-- project.xml
+|   |-- src
+|   |   |-- conf
+|   |   |   +-- MANIFEST.MF
+|   |   +-- java
+|   |       +-- murach
+|   |           |-- business
+|   |           |   |-- Cart.java
+|   |           |   |-- LineItem.java
+|   |           |   +-- Product.java
+|   |           |-- cart
+|   |           |   |-- CartServlet.java
+|   |           |   +-- ProductsServlet.java
+|   |           +-- data
+|   |               +-- ProductIO.java
+|   |-- web
+|   |   |-- META-INF
+|   |   |   +-- context.xml
+|   |   |-- styles
+|   |   |   +-- main.css
+|   |   |-- WEB-INF
+|   |   |   |-- products.txt
+|   |   |   +-- web.xml
+|   |   |-- cart.jsp
+|   |   |-- checkout.jsp
+|   |   +-- index.jsp
+|   +-- build.xml
+|-- libs
+|   |-- javax.mail.jar
+|   |-- jstl-1.2.jar
+|   |-- mysql-connector-java-5.1.23-bin.jar
+|   |-- poi-3.10-FINAL-20140208.jar
+|   +-- tomcat-dbcp.jar
++-- doc.txt
